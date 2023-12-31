@@ -5,6 +5,8 @@
 #include <stdio.h>
 
 void menu();
+int login();
+int signup();
 
 struct User {
     int user_id;
@@ -44,4 +46,33 @@ void menu() {
               menu();
         }
     }
+}
+
+int login () {
+    return 1;
+}
+
+int signup() {
+    char in_username[30];
+    char in_email[30];
+    char in_password[20];
+    int in_phone=0;
+    char in_address[50];
+
+    printf("This is Registration Option:\n");
+    printf("Enter your user name to Register:");
+    scanf(" %[^\n]",&in_username[0]);
+
+    printf("Enter your user email to Register:");
+    scanf(" %[^\n]",&in_email[0]);
+
+    printf("Enter your user password to Register:");
+    scanf(" %[^\n]",&in_password[0]);
+
+    printf("Enter your PhoneNumber to Register:");
+    scanf("%d",&in_phone); // NOLINT(*-err34-c)
+
+    printf("Enter your Address to Register:");
+    scanf(" %[^\n]",&in_address[0]);
+
 }
