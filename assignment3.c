@@ -3,12 +3,17 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 
 void menu();
 int login();
 int signup();
-void copy_two_char_arr(char first[50], char second[50]);
+void logout() ;
+        int size_of_arr(char arr[50]);
+void copy_two_char_arr(char given[50], char desired[50]);
 int compare_size_of_two_arr(char first[30], char second[30]);
+int compare_each_index_of_two_arr(char first[30], char second[30]);
+void show_login_user_info(int user_id);
 
 struct User {
     int user_id;
@@ -19,8 +24,10 @@ struct User {
     char address[50];
 };
 
+
 struct User data[5];
 int g_user_count = 0;
+int g_login_user_id = -1;
 
 int main() {
     menu();
@@ -32,23 +39,27 @@ void menu() {
         int option = 0;
 
         printf("\n<<<<<<<<<< Welcome to our system >>>>>>>>>>\n");
-        printf("Press 1 to Sign in:\nPress 2 to Sign Up:\nPress 3 to Exit\n");
+        printf("Press 1 to Sign up:\nPress 2 to Sign in:\nPress 3 to show logged in user info\nPress 4 to logout\n\n");
 
         printf("Please Enter Your Option: ");
         scanf("%d", &option);
+        printf("\n\n");
 
         switch (option) {
             case 1:
-                login();
-                break;
-            case 2:
                 signup();
                 break;
+            case 2:
+                login();
+                break;
             case 3:
-                printf("exit");
+                show_login_user_info(g_login_user_id);
+                break;
+            case 4:
+                logout();
                 break;
             default:
-                menu();
+                exit(-1);
         }
     }
 }
@@ -56,20 +67,47 @@ void menu() {
 int login() {
     char in_email[30];
     char in_password[20];
+    int is_success = 0;
 
-    printf("\n<<<<<<<< Registration >>>>>>>>:\n");
-    printf("Enter your email to Login:");
-    scanf(" %[^\n]", &in_email[0]);
+    if(g_login_user_id != -1) {
+        printf("You have already logged in.\nLog out first to sign in with another account\n");
+        return 0;
+    }
 
-    printf("Enter your pasword to Login:");
-    scanf(" %[^\n]", &in_password[0]);
+    if(g_user_count == 0) {
+        printf("No entries in the database!! Create a user by signing up first!!\n\n");
+        return 0;
+    }
 
-    int s ;
-    printf("db mail;   %s\n",data[0].user_email);
-    printf("in main; %s",in_email);
-    s= compare_size_of_two_arr(in_email,data[0].user_email);
-    printf("%d",s);
+    do {
+        printf("\n<<<<<<<< Log In >>>>>>>>:\n");
+        printf("Enter your email to Login:");
+        scanf(" %[^\n]", &in_email[0]);
 
+        printf("Enter your pasword to Login:");
+        scanf(" %[^\n]", &in_password[0]);
+
+        int i = 0;
+        for (i = 0; i < g_user_count; i++) {
+            int emailCheck = compare_each_index_of_two_arr(in_email, data[i].user_email);
+            if (emailCheck) {
+                int passCheck = compare_each_index_of_two_arr(in_password, data[i].password);
+                if (passCheck) {
+                    is_success = 1;
+                    printf("Successfully logged in to our system!");
+                    g_login_user_id = i;
+                    show_login_user_info(g_login_user_id);
+                    break;
+                } else {
+                    is_success = 0;
+                    printf("Wrong Password!! Try Again!!\n");
+                }
+            } else {
+                is_success = 0;
+                printf("Wrong Email!! Try Again!!\n");
+            }
+        }
+    } while (is_success == 0);
 
     return 1;
 }
@@ -107,10 +145,19 @@ int signup() {
     return 1;
 }
 
-void copy_two_char_arr(char first[50], char second[50]) {
+void logout() {
+   if(g_login_user_id == -1) {
+       printf("You can't log out if you are not logged in!!!\n");
+       return;
+   }
+       g_login_user_id = -1;
+       printf("You have successfully log out");
+}
+
+void copy_two_char_arr(char given[50], char desired[50]) {
     int i = 0;
-    while (first[i] != "\0" && i < 50) {
-        second[i] = first[i];
+    while (given[i] != '\000' && i < 50) {
+        desired[i] = given[i];
         i++;
     }
 }
@@ -119,11 +166,11 @@ int compare_size_of_two_arr(char first[30], char second[30]) {
     int i = 0;
     int result = 0;
     for (i = 0; i < 30; i++) {
-        if(first[i] != "\0" && second[i] != "\0") {
+        if (first[i] != '\000' && second[i] != '\000') {
             result = 1;
         } else {
             result = 0;
-          break;
+            break;
         }
     }
 
@@ -132,12 +179,44 @@ int compare_size_of_two_arr(char first[30], char second[30]) {
 
 int size_of_arr(char arr[50]) {
     int size = 0;
-    int i =0;
-    for (i=0;i<30;i++) {
-        if(arr[i] == "\0") {
+    int i = 0;
+    for (i = 0; i < 30; i++) {
+        if (arr[i] == '\000') {
             break;
+        } else {
+            size++;
         }
-        size++;
     }
     return size;
+}
+
+int compare_each_index_of_two_arr(char first[30], char second[30]) {
+    int identical = 0;
+    int firstSize = size_of_arr(first);
+    int secondSize = size_of_arr(second);
+    if (firstSize != secondSize) {
+        return 0;
+    } else {
+        int i = 0;
+        for (i = 0; i < firstSize; i++) {
+            if (first[i] != second[i]) {
+                identical = 0;
+                break;
+            } else {
+                identical = 1;
+            }
+        }
+    }
+    return identical;
+}
+
+void show_login_user_info(int user_id) {
+   if(user_id != -1) {
+       printf("UserName: %s\n",data[user_id].user_name);
+       printf("Email: %s\n",data[g_login_user_id].user_email);
+       printf("Phone Number: %d\n",data[g_login_user_id].phone_number);
+       printf("Address: %s\n",data[g_login_user_id].address);
+   } else {
+       printf("No logged in user found!!\n");
+   }
 }
