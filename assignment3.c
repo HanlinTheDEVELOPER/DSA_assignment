@@ -2,6 +2,7 @@
 // Created by hanlin on 12/31/23.
 //
 
+#include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,6 +14,7 @@ int size_of_arr(char arr[50]);
 void copy_two_char_arr(char given[50], char desired[50]);
 int compare_each_index_of_two_arr(char first[30], char second[30]);
 void show_login_user_info(int user_id);
+int check_is_password_stron(char password[20]);
 
 struct User {
     int user_id;
@@ -119,6 +121,7 @@ int signup() {
         int in_phone = 0;
         char in_address[50];
         int is_email_unique = 0;
+        int is_password_strong = 0;
 
         printf("\n<<<<<<<< Registration >>>>>>>>:\n");
         printf("Enter your user name to Register:");
@@ -130,7 +133,7 @@ int signup() {
             int i = 0;
             for (i = 0; i <= g_user_count; i++) {
                 int emailCheck = compare_each_index_of_two_arr(in_email, data[i].user_email);
-                if(emailCheck) {
+                if (emailCheck) {
                     printf("Email already used!!!\n");
                     break;
                 } else {
@@ -139,8 +142,16 @@ int signup() {
             }
         } while (is_email_unique == 0);
 
-        printf("Enter your user password to Register:");
-        scanf(" %[^\n]", &in_password[0]);
+        do {
+            printf("Enter your user password to Register:");
+            scanf(" %[^\n]", &in_password[0]);
+            int is_strong = check_is_password_stron(in_password);
+            if (is_strong == 0) {
+                is_password_strong = 1;
+            }
+
+
+        } while (is_password_strong == 0);
 
         printf("Enter your PhoneNumber to Register:");
         scanf("%d", &in_phone);// NOLINT(*-err34-c)
@@ -222,4 +233,23 @@ void show_login_user_info(int user_id) {
     } else {
         printf("No logged in user found!!\n");
     }
+}
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wint-conversion"
+int check_is_password_stron(char password[20]) {
+    int is_valid;
+    regex_t regexp;
+    //            It must contain at least one digit (\\d).
+    //            It must contain at least one lowercase letter ([a-z]).
+    //            It must contain at least one uppercase letter ([A-Z]).
+    //            It must contain at least one of the following special characters: _, +, -, .,, !, @, #, $, %, ^, &, *, (), ;, /, |, <, >, ", or '.
+    //            It must be at least 8 characters long.
+    int is_compiled = regcomp(&regexp,  "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[_+-.,!@#$%^&*();\\/|<>\"']).{8,})", 0);
+
+
+        is_valid = regexec(&regexp, password, 0, NULL, 0);
+        printf("is_valid %d\n", is_valid);
+
+    return is_valid;
 }
