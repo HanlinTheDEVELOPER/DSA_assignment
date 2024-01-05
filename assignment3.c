@@ -8,10 +8,9 @@
 void menu();
 int login();
 int signup();
-void logout() ;
-        int size_of_arr(char arr[50]);
+void logout();
+int size_of_arr(char arr[50]);
 void copy_two_char_arr(char given[50], char desired[50]);
-int compare_size_of_two_arr(char first[30], char second[30]);
 int compare_each_index_of_two_arr(char first[30], char second[30]);
 void show_login_user_info(int user_id);
 
@@ -69,12 +68,12 @@ int login() {
     char in_password[20];
     int is_success = 0;
 
-    if(g_login_user_id != -1) {
+    if (g_login_user_id != -1) {
         printf("You have already logged in.\nLog out first to sign in with another account\n");
         return 0;
     }
 
-    if(g_user_count == 0) {
+    if (g_user_count == 0) {
         printf("No entries in the database!! Create a user by signing up first!!\n\n");
         return 0;
     }
@@ -113,45 +112,63 @@ int login() {
 }
 
 int signup() {
-    char in_username[30];
-    char in_email[30];
-    char in_password[20];
-    int in_phone = 0;
-    char in_address[50];
+    if (g_user_count < 5) {
+        char in_username[30];
+        char in_email[30];
+        char in_password[20];
+        int in_phone = 0;
+        char in_address[50];
+        int is_email_unique = 0;
 
-    printf("\n<<<<<<<< Registration >>>>>>>>:\n");
-    printf("Enter your user name to Register:");
-    scanf(" %[^\n]", &in_username[0]);
+        printf("\n<<<<<<<< Registration >>>>>>>>:\n");
+        printf("Enter your user name to Register:");
+        scanf(" %[^\n]", &in_username[0]);
 
-    printf("Enter your user email to Register:");
-    scanf(" %[^\n]", &in_email[0]);
+        do {
+            printf("Enter your user email to Register:");
+            scanf(" %[^\n]", &in_email[0]);
+            int i = 0;
+            for (i = 0; i <= g_user_count; i++) {
+                int emailCheck = compare_each_index_of_two_arr(in_email, data[i].user_email);
+                if(emailCheck) {
+                    printf("Email already used!!!\n");
+                    break;
+                } else {
+                    is_email_unique = 1;
+                }
+            }
+        } while (is_email_unique == 0);
 
-    printf("Enter your user password to Register:");
-    scanf(" %[^\n]", &in_password[0]);
+        printf("Enter your user password to Register:");
+        scanf(" %[^\n]", &in_password[0]);
 
-    printf("Enter your PhoneNumber to Register:");
-    scanf("%d", &in_phone);// NOLINT(*-err34-c)
+        printf("Enter your PhoneNumber to Register:");
+        scanf("%d", &in_phone);// NOLINT(*-err34-c)
 
-    printf("Enter your Address to Register:");
-    scanf(" %[^\n]", &in_address[0]);
+        printf("Enter your Address to Register:");
+        scanf(" %[^\n]", &in_address[0]);
 
-    copy_two_char_arr(in_username, data[g_user_count].user_name);
-    copy_two_char_arr(in_email, data[g_user_count].user_email);
-    copy_two_char_arr(in_password, data[g_user_count].password);
-    copy_two_char_arr(in_address, data[g_user_count].address);
-    data[g_user_count].phone_number = in_phone;
-    data[g_user_count].user_id = g_user_count;
-    g_user_count++;
-    return 1;
+        copy_two_char_arr(in_username, data[g_user_count].user_name);
+        copy_two_char_arr(in_email, data[g_user_count].user_email);
+        copy_two_char_arr(in_password, data[g_user_count].password);
+        copy_two_char_arr(in_address, data[g_user_count].address);
+        data[g_user_count].phone_number = in_phone;
+        data[g_user_count].user_id = g_user_count;
+        g_user_count++;
+        return 1;
+    } else {
+        printf("No more room for another user");
+        return 1;
+    }
 }
 
 void logout() {
-   if(g_login_user_id == -1) {
-       printf("You can't log out if you are not logged in!!!\n");
-       return;
-   }
-       g_login_user_id = -1;
-       printf("You have successfully log out");
+    if (g_login_user_id == -1) {
+        printf("You can't log out if you are not logged in!!!\n");
+        return;
+    }
+    g_login_user_id = -1;
+    printf("You have successfully log out");
 }
 
 void copy_two_char_arr(char given[50], char desired[50]) {
@@ -162,20 +179,6 @@ void copy_two_char_arr(char given[50], char desired[50]) {
     }
 }
 
-int compare_size_of_two_arr(char first[30], char second[30]) {
-    int i = 0;
-    int result = 0;
-    for (i = 0; i < 30; i++) {
-        if (first[i] != '\000' && second[i] != '\000') {
-            result = 1;
-        } else {
-            result = 0;
-            break;
-        }
-    }
-
-    return result;
-}
 
 int size_of_arr(char arr[50]) {
     int size = 0;
@@ -211,12 +214,12 @@ int compare_each_index_of_two_arr(char first[30], char second[30]) {
 }
 
 void show_login_user_info(int user_id) {
-   if(user_id != -1) {
-       printf("UserName: %s\n",data[user_id].user_name);
-       printf("Email: %s\n",data[g_login_user_id].user_email);
-       printf("Phone Number: %d\n",data[g_login_user_id].phone_number);
-       printf("Address: %s\n",data[g_login_user_id].address);
-   } else {
-       printf("No logged in user found!!\n");
-   }
+    if (user_id != -1) {
+        printf("UserName: %s\n", data[user_id].user_name);
+        printf("Email: %s\n", data[g_login_user_id].user_email);
+        printf("Phone Number: %d\n", data[g_login_user_id].phone_number);
+        printf("Address: %s\n", data[g_login_user_id].address);
+    } else {
+        printf("No logged in user found!!\n");
+    }
 }
