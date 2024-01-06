@@ -143,7 +143,7 @@ int signup() {
         } while (is_email_unique == 0);
 
         do {
-            printf("\n(Password must include at least ONE CAPTIAL LETTER,ONE SPECIAL CHARACTER and ONE NUMBER,\nPassword must be at least EIGHT LETTERS )\n");
+            printf("\nPassword must be at least EIGHT LETTERS )\n(Password must include at least ONE CAPTIAL LETTER,ONE SPECIAL CHARACTER and ONE NUMBER,\n");
             printf("Enter your user password to Register:");
             scanf(" %[^\n]", &in_password[0]);
             int is_strong = check_is_password_stron(in_password);
