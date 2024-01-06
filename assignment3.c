@@ -235,21 +235,51 @@ void show_login_user_info(int user_id) {
     }
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wint-conversion"
 int check_is_password_stron(char password[20]) {
-    int is_valid;
-    regex_t regexp;
-    //            It must contain at least one digit (\\d).
-    //            It must contain at least one lowercase letter ([a-z]).
-    //            It must contain at least one uppercase letter ([A-Z]).
-    //            It must contain at least one of the following special characters: _, +, -, .,, !, @, #, $, %, ^, &, *, (), ;, /, |, <, >, ", or '.
-    //            It must be at least 8 characters long.
-    int is_compiled = regcomp(&regexp,  "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[_+-.,!@#$%^&*();\\/|<>\"']).{8,})", 0);
+    int is_valid = 0;
+    char special_char[9] = {'!', '@', '#', '$', '%', '^', '&', '*', '?'};
+    int is_capital_include = 0;
+    int is_num_include = 0;
+    int is_special_include = 0;
 
+    int i = 0;
+    for (i = 0; i < size_of_arr(password); i++) {
 
-        is_valid = regexec(&regexp, password, 0, NULL, 0);
-        printf("is_valid %d\n", is_valid);
+        //checking if the given password include at least one capital letter
+        // in ASCII Table , A is 65 and Z is 90
+        if (is_capital_include == 0) {
+            if (password[i] > 64 && password[i] < 91) {
+                is_capital_include = 1;
+                continue;
+            }
+        }
+
+        //checking if the given password include as least one number
+        //in ASCII Table , 0 is 48 && 9 is 57
+        if (is_num_include == 0) {
+            if (password[i] > 47 && password[i] < 58) {
+                is_num_include = 1;
+                continue;
+            }
+        }
+
+        //checking if the given password include as least one special char
+        if (is_special_include == 0) {
+            int j = 0;
+            for (j = 0; j < size_of_arr(special_char); j++) {
+                if (password[i] == special_char[i]) {
+                    is_special_include = 1;
+                    break;
+                }
+            }
+        }
+
+        //check if all of validation pass and break from the outer loop;
+        if (is_special_include == 1 && is_num_include == 1 && is_capital_include == 1) {
+            is_valid = 1;
+            break;
+        }
+    }
 
     return is_valid;
 }
