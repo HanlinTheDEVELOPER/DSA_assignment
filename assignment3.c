@@ -247,44 +247,40 @@ int check_is_password_stron(char password[20]) {
         is_valid = 0;
     } else {
         int i = 0;
-        for (i = 0; i < size_of_arr(password); i++) {
-
+        // add 1 to size of password so that if number or capital letter is in the last index it won't failed!
+        for (i = 0; i < size_of_arr(password) + 1; i++) {
             //check if all of validation pass and break from the outer loop;
-
-
-            //checking if the given password include at least one capital letter
-            // in ASCII Table , A is 65 and Z is 90
-            if (is_capital_include == 0) {
-                if (password[i] > 64 && password[i] < 91) {
-                    is_capital_include = 1;
-                    continue;
-                }
-            }
-
-            //checking if the given password include as least one number
-            //in ASCII Table , 0 is 48 && 9 is 57
-            if (is_num_include == 0) {
-                if (password[i] > 47 && password[i] < 58) {
-                    is_num_include = 1;
-                    continue;
-                }
-            }
-
-            //checking if the given password include as least one special char
-            if (is_special_include == 0) {
-                int j = 0;
-                for (j = 0; j < size_of_arr(special_char); j++) {
-                    if (password[i] == special_char[j]) {
-                        is_special_include = 1;
-                        break;
-                    }
-                }
-            }
-
             if (is_special_include == 1 && is_num_include == 1 && is_capital_include == 1) {
                 is_valid = 1;
                 printf("isvalid %d\n", is_valid);
                 break;
+            } else {
+                //checking if the given password include at least one capital letter
+                // in ASCII Table , A is 65 and Z is 90
+                if (is_capital_include == 0) {
+                    if (password[i] > 64 && password[i] < 91) {
+                        is_capital_include = 1;
+                        continue;
+                    }
+                }
+                //checking if the given password include as least one number
+                //in ASCII Table , 0 is 48 && 9 is 57
+                if (is_num_include == 0) {
+                    if (password[i] > 47 && password[i] < 58) {
+                        is_num_include = 1;
+                        continue;
+                    }
+                }
+                //checking if the given password include as least one special char
+                if (is_special_include == 0) {
+                    int j = 0;
+                    for (j = 0; j < size_of_arr(special_char); j++) {
+                        if (password[i] == special_char[j]) {
+                            is_special_include = 1;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
