@@ -15,6 +15,7 @@ void copy_two_char_arr(char given[50], char desired[50]);
 int compare_each_index_of_two_arr(char first[30], char second[30]);
 void show_login_user_info(int user_id);
 int check_is_password_stron(char password[20]);
+int after_login_option();
 
 struct User {
     int user_id;
@@ -97,7 +98,7 @@ int login() {
                     is_success = 1;
                     printf("Successfully logged in to our system!");
                     g_login_user_id = i;
-                    show_login_user_info(g_login_user_id);
+                    after_login_option();
                     break;
                 } else {
                     is_success = 0;
@@ -190,7 +191,6 @@ void copy_two_char_arr(char given[50], char desired[50]) {
         i++;
     }
 }
-
 
 int size_of_arr(char arr[50]) {
     int size = 0;
@@ -290,4 +290,26 @@ int check_is_password_stron(char password[20]) {
     printf("is special %d", is_special_include);
     printf("is num %d\n", is_num_include);
     return is_valid;
+}
+
+int after_login_option() {
+    while(1) {
+    int opt = 0;
+    printf("Press 1 to view account info!\nPress 2 to transfer ASM Coins!\nPress 2 to logout!\n");
+    printf("Please enter your option : ");
+    scanf("%d",&opt);
+    switch (opt) {
+        case 1:
+            show_login_user_info(g_login_user_id);
+            break;
+        case 2:
+            break;
+        case 3:
+           logout();
+            break;
+        default:
+            exit(-1);
+    }
+    return 1;
+    }
 }
