@@ -42,7 +42,7 @@ void menu() {
         int option = 0;
 
         printf("\n<<<<<<<<<< Welcome to our system >>>>>>>>>>\n");
-        printf("Press 1 to Sign up:\nPress 2 to Sign in:\n\n");
+        printf("Press 1 to Sign up:\nPress 2 to Sign in:\nPress ANY OTHER NUMBERs to exit!\n");
 
         printf("Please Enter Your Option: ");
         scanf("%d", &option);
@@ -72,7 +72,7 @@ int login() {
     }
 
     if (g_user_count == 0) {
-        printf("No entries in the database!! Create a user by signing up first!!\n\n");
+        printf("No entries in the database!! Create a user by signing up first!!\n");
         return 0;
     }
 
@@ -172,10 +172,6 @@ int signup() {
 }
 
 int logout() {
-    //    if (g_login_user_id == -1) {
-    //        printf("You can't log out if you are not logged in!!!\n");
-    //        return 1;
-    //    }
     g_login_user_id = -1;
     printf("You have successfully log out");
     return 1;
@@ -315,5 +311,22 @@ int after_login_option() {
 }
 
 int transfer_conis() {
+    int receiver_id = -1;
+
+    char receiver_email[30];
+    int transfer_amount = 0;
+    int is_email_correct = 0;
+
+    do {
+        printf("Enter receiver email :");
+        scanf(" %[^\n]", &receiver_email[0]);
+        for(int i = 0; i < g_user_count; i++ ) {
+            int emailCheck = compare_each_index_of_two_arr(receiver_email, data[i].user_email);
+            if(emailCheck) {
+                receiver_id = i;
+            }
+        }
+    } while (is_email_correct == 0);
+
     return 1;
 }
