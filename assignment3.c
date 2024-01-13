@@ -9,11 +9,11 @@
 void menu();
 int login();
 int signup();
-void logout();
+int logout();
 int size_of_arr(char arr[50]);
 void copy_two_char_arr(char given[50], char desired[50]);
 int compare_each_index_of_two_arr(char first[30], char second[30]);
-void show_login_user_info(int user_id);
+int show_login_user_info(int user_id);
 int check_is_password_stron(char password[20]);
 int after_login_option();
 
@@ -24,6 +24,7 @@ struct User {
     char password[20];
     int phone_number;
     char address[50];
+    int coins;
 };
 
 
@@ -41,7 +42,7 @@ void menu() {
         int option = 0;
 
         printf("\n<<<<<<<<<< Welcome to our system >>>>>>>>>>\n");
-        printf("Press 1 to Sign up:\nPress 2 to Sign in:\nPress 3 to show logged in user info\nPress 4 to logout\n\n");
+        printf("Press 1 to Sign up:\nPress 2 to Sign in:\n\n");
 
         printf("Please Enter Your Option: ");
         scanf("%d", &option);
@@ -53,12 +54,6 @@ void menu() {
                 break;
             case 2:
                 login();
-                break;
-            case 3:
-                show_login_user_info(g_login_user_id);
-                break;
-            case 4:
-                logout();
                 break;
             default:
                 exit(-1);
@@ -96,7 +91,7 @@ int login() {
                 int passCheck = compare_each_index_of_two_arr(in_password, data[i].password);
                 if (passCheck) {
                     is_success = 1;
-                    printf("Successfully logged in to our system!");
+                    printf("Successfully logged in to our system!\n");
                     g_login_user_id = i;
                     after_login_option();
                     break;
@@ -166,6 +161,7 @@ int signup() {
         copy_two_char_arr(in_password, data[g_user_count].password);
         copy_two_char_arr(in_address, data[g_user_count].address);
         data[g_user_count].phone_number = in_phone;
+        data[g_user_count].coins = 500;
         data[g_user_count].user_id = g_user_count;
         g_user_count++;
         return 1;
@@ -175,13 +171,14 @@ int signup() {
     }
 }
 
-void logout() {
-    if (g_login_user_id == -1) {
-        printf("You can't log out if you are not logged in!!!\n");
-        return;
-    }
+int logout() {
+    //    if (g_login_user_id == -1) {
+    //        printf("You can't log out if you are not logged in!!!\n");
+    //        return 1;
+    //    }
     g_login_user_id = -1;
     printf("You have successfully log out");
+    return 1;
 }
 
 void copy_two_char_arr(char given[50], char desired[50]) {
@@ -225,15 +222,17 @@ int compare_each_index_of_two_arr(char first[30], char second[30]) {
     return identical;
 }
 
-void show_login_user_info(int user_id) {
+int show_login_user_info(int user_id) {
     if (user_id != -1) {
         printf("UserName: %s\n", data[user_id].user_name);
         printf("Email: %s\n", data[g_login_user_id].user_email);
         printf("Phone Number: %d\n", data[g_login_user_id].phone_number);
         printf("Address: %s\n", data[g_login_user_id].address);
+        printf("Total coins: %d\n", data[g_login_user_id].coins);
     } else {
         printf("No logged in user found!!\n");
     }
+    return 1;
 }
 
 int check_is_password_stron(char password[20]) {
@@ -293,23 +292,28 @@ int check_is_password_stron(char password[20]) {
 }
 
 int after_login_option() {
-    while(1) {
-    int opt = 0;
-    printf("Press 1 to view account info!\nPress 2 to transfer ASM Coins!\nPress 2 to logout!\n");
-    printf("Please enter your option : ");
-    scanf("%d",&opt);
-    switch (opt) {
-        case 1:
-            show_login_user_info(g_login_user_id);
-            break;
-        case 2:
-            break;
-        case 3:
-           logout();
-            break;
-        default:
-            exit(-1);
+
+    while (1) {
+        int opt = 0;
+        printf("Press 1 to view account info!\nPress 2 to transfer ASM Coins!\nPress 3 to logout!\n");
+        printf("Please enter your option : ");
+        scanf("%d", &opt);
+        switch (opt) {
+            case 1:
+                show_login_user_info(g_login_user_id);
+                break;
+            case 2:
+                break;
+            case 3:
+                logout();
+                return 1;
+                break;
+            default:
+                exit(-1);
+        }
     }
+}
+
+int transfer_conis() {
     return 1;
-    }
 }
