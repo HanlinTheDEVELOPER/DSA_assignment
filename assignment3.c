@@ -7,17 +7,28 @@
 #include <stdlib.h>
 
 void menu();
+
 int login();
+
 int signup();
+
 int logout();
+
 int size_of_arr(char arr[50]);
+
 void copy_two_char_arr(char given[50], char desired[50]);
+
 int compare_each_index_of_two_arr(char first[30], char second[30]);
+
 int show_login_user_info(int user_id);
+
 int check_is_password_stron(char password[20]);
+
 int after_login_option();
+
 int transfer_conis_form();
 
+int transfer_coins(int amounts, int receiver_id);
 
 struct User {
     int user_id;
@@ -55,7 +66,7 @@ void menu() {
                 signup();
                 break;
             case 2:
-                login() ;
+                login();
                 break;
             default:
                 exit(-1);
@@ -321,6 +332,7 @@ int transfer_conis_form() {
     char receiver_email[30];
     int transfer_amount = 0;
     int is_email_correct = 0;
+    int is_coin_enough = 0;
 
     do {
         printf("Enter receiver email :");
@@ -333,17 +345,31 @@ int transfer_conis_form() {
                 break;
             } else {
                 if (i == g_user_count - 1) {
-                    printf("\nNo user associate with %s. Please enter email correctly!\n ",receiver_email);
+                    printf("\nNo user associate with %s. Please enter email correctly!\n ", receiver_email);
                 }
             }
         }
     } while (is_email_correct == 0);
-    printf("Enter amount you want to transfer:");
-    scanf("%d",&transfer_amount);
 
+    do {
+        printf("Enter amount you want to transfer:");
+        scanf("%d", &transfer_amount);
+        if (transfer_amount > data[g_login_user_id].coins) {
+            printf("Not enough coins\nYou only have %d coins. Enter only amount you can afford!\n",
+                   data[g_login_user_id].coins);
+        } else {
+            is_coin_enough = 1;
+        }
+    } while (is_coin_enough == 0);
+
+    transfer_coins(transfer_amount,receiver_id);
     return 1;
 }
 
-int transfer_coins (int amounts,int receiver_id) {
-    return  1;
+int transfer_coins(int amounts, int receiver_id) {
+    data[receiver_id].coins += amounts;
+    data[g_login_user_id].coins -= amounts;
+    printf("\nTransfer success!!\nRemaining Balances: %d \n",data[g_login_user_id].coins);
+    return 1;
+
 }
