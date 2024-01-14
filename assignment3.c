@@ -16,6 +16,8 @@ int compare_each_index_of_two_arr(char first[30], char second[30]);
 int show_login_user_info(int user_id);
 int check_is_password_stron(char password[20]);
 int after_login_option();
+int transfer_conis();
+
 
 struct User {
     int user_id;
@@ -100,8 +102,10 @@ int login() {
                     printf("Wrong Password!! Try Again!!\n");
                 }
             } else {
-                is_success = 0;
-                printf("Wrong Email!! Try Again!!\n");
+                if (i == g_user_count - 1) {
+                    is_success = 0;
+                    printf("Wrong Email!! Try Again!!\n");
+                }
             }
         }
     } while (is_success == 0);
@@ -173,7 +177,7 @@ int signup() {
 
 int logout() {
     g_login_user_id = -1;
-    printf("You have successfully log out");
+    printf("\nYou have successfully log out\n");
     return 1;
 }
 
@@ -291,7 +295,7 @@ int after_login_option() {
 
     while (1) {
         int opt = 0;
-        printf("Press 1 to view account info!\nPress 2 to transfer ASM Coins!\nPress 3 to logout!\n");
+        printf("\nPress 1 to view account info!\nPress 2 to transfer ASM Coins!\nPress 3 to logout!\n");
         printf("Please enter your option : ");
         scanf("%d", &opt);
         switch (opt) {
@@ -299,6 +303,7 @@ int after_login_option() {
                 show_login_user_info(g_login_user_id);
                 break;
             case 2:
+                transfer_conis();
                 break;
             case 3:
                 logout();
@@ -320,10 +325,16 @@ int transfer_conis() {
     do {
         printf("Enter receiver email :");
         scanf(" %[^\n]", &receiver_email[0]);
-        for(int i = 0; i < g_user_count; i++ ) {
+        for (int i = 0; i < g_user_count; i++) {
             int emailCheck = compare_each_index_of_two_arr(receiver_email, data[i].user_email);
-            if(emailCheck) {
+            if (emailCheck) {
                 receiver_id = i;
+                is_email_correct = 1;
+                break;
+            } else {
+                if (i == g_user_count - 1) {
+                    printf("\nNo user associate with %s. Please enter email correctly!\n ",receiver_email);
+                }
             }
         }
     } while (is_email_correct == 0);
