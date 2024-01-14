@@ -371,5 +371,5 @@ int transfer_coins(int amounts, int receiver_id) {
     data[g_login_user_id].coins -= amounts;
     printf("\nTransfer success!!\nRemaining Balances: %d \n",data[g_login_user_id].coins);
     return 1;
-
 }
+
