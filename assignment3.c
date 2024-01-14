@@ -55,7 +55,7 @@ void menu() {
                 signup();
                 break;
             case 2:
-                login();
+                login() ;
                 break;
             default:
                 exit(-1);
