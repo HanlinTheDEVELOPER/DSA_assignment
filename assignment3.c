@@ -16,7 +16,7 @@ int compare_each_index_of_two_arr(char first[30], char second[30]);
 int show_login_user_info(int user_id);
 int check_is_password_stron(char password[20]);
 int after_login_option();
-int transfer_conis();
+int transfer_conis_form();
 
 
 struct User {
@@ -303,7 +303,7 @@ int after_login_option() {
                 show_login_user_info(g_login_user_id);
                 break;
             case 2:
-                transfer_conis();
+                transfer_conis_form();
                 break;
             case 3:
                 logout();
@@ -315,7 +315,7 @@ int after_login_option() {
     }
 }
 
-int transfer_conis() {
+int transfer_conis_form() {
     int receiver_id = -1;
 
     char receiver_email[30];
@@ -338,6 +338,8 @@ int transfer_conis() {
             }
         }
     } while (is_email_correct == 0);
+    printf("Enter amount you want to transfer:");
+    scanf("%d",&transfer_amount);
 
     return 1;
 }
