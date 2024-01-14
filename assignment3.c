@@ -343,3 +343,7 @@ int transfer_conis_form() {
 
     return 1;
 }
+
+int transfer_coins (int amounts,int receiver_id) {
+    return  1;
+}
